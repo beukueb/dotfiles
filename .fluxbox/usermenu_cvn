@@ -1,0 +1,32 @@
+# Please see <file:/usr/share/doc/menu/README> for information.
+# to use this own menu, change ~/.fluxbox/menu to include this file
+
+[begin] (Basis)
+   [exec] (Terminator) {/usr/bin/terminator} </usr/share/pixmaps/terminator.png>
+   [exec] (Thunar) {/usr/bin/thunar} </usr/share/pixmaps/Thunar/Thunar-about-logo.png>
+   [exec] (Python) {eric5} </usr/share/pixmaps/eric.png>
+   [exec] (Chromium) {/usr/bin/chromium} </usr/share/icons/hicolor/16x16/apps/chromium.png>
+   [exec] (Emacs) {/bin/emacs} </usr/share/icons/hicolor/16x16/apps/emacs.png>
+   [exec] (VirtualBox) {/usr/bin/VirtualBox} </usr/share/pixmaps/VBox.png>
+   [exec] (Screenshot) {scrot -e 'mv $f ~/Downloads/'}
+   [separator]
+
+   [submenu] (Reference software) {}
+       [exec] (JabRef) {jabref} </usr/share/pixmaps/jabref.png> #AUR
+       [exec] (Okular) {okular} </usr/share/icons/hicolor/16x16/apps/okular.png>
+   [end]
+
+   [submenu] (Extra) {}
+	 [exec] (Poedit) {poedit} </usr/share/pixmaps/poedit.png>
+	 [exec] (Calibre) {calibre} </usr/share/calibre/images/lt.png>
+	 [exec] (Gedit) {/usr/bin/gedit} <>
+         [exec] (MySQL Workbench) {mysql-workbench} <>
+	 [exec] (XCalc) {xcalc} <>
+         [exec] (Chromium Incog) {/usr/bin/chromium-browser --incognito} </usr/share/pixmaps/chromium-browser.png>
+         [exec] (Transmission) {/usr/bin/transmission-gtk} </usr/share/pixmaps/transmission.xpm>
+         [exec] (Printers) {chromium http://localhost:631/} <>
+   [end]
+
+   [separator]
+
+[end]

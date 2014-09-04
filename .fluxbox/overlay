@@ -1,0 +1,11 @@
+menu.title.font: sans-16:bold
+toolbar.clock.font: sans-16:bold
+toolbar.workspace.font: sans-16:bold
+toolbar.height: 20
+*font: sans-14
+
+! The following line will prevent styles from setting the background.
+! background: none,aspect,centered,tile, or,random (path to directory instead of single file)
+! background: aspect
+! background.pixmap: /home/youruser/wallpapers/this_is_a_neat_wallpaper.jpg
+

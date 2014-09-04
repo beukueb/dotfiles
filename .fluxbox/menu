@@ -1,0 +1,7 @@
+[begin] (fluxbox)
+[include] (~/.fluxbox/usermenu_cvn)
+[include] (/usr/share/fluxbox/menu)
+[separator]
+[exec] (Reboot computer) {systemctl reboot}
+[exec] (Shutdown computer) {systemctl poweroff}
+[end]

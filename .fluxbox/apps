@@ -1,0 +1,21 @@
+[app] (name=fbrun)
+  [Head]	{2}
+  [Position]	(UPPERLEFT)	{27% 36%}
+  [Layer]	{2}
+[end]
+[app] (name=chromium) (class=Chromium) (role=browser)
+  [Head]	{1}
+  [Position]	(UPPERLEFT)	{18% 3%}
+[end]
+[app] (name=terminator) (class=Terminator)
+  [Dimensions]	{68% 98%}
+[end]
+[app] (name=evince) (class=Evince)
+  [Dimensions]	{55% 79%}
+[end]
+[app] (name=emacs) (class=Emacs)
+  [Position]	(UPPERLEFT)	{15% 3%}
+[end]
+[app] (name=sun-awt-X11-XFramePeer) (class=net-sf-jabref-JabRefMain)
+  [Head]	{2}
+[end]
