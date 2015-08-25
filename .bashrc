@@ -108,4 +108,10 @@ if [ -f ~/.bash_env ]; then
     . ~/.bash_env
 fi
 
+#Virtualenvwrapper
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/Projects
+source virtualenvwrapper.sh
+
+#X11
 [[ $(tty) == "/dev/tty1" ]] && exec startx

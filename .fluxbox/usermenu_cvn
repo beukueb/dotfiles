@@ -6,8 +6,9 @@
    [exec] (Thunar) {/usr/bin/thunar} </usr/share/pixmaps/Thunar/Thunar-about-logo.png>
    [exec] (Python) {eric5} </usr/share/pixmaps/eric.png>
    [exec] (Chromium) {/usr/bin/chromium} </usr/share/icons/hicolor/16x16/apps/chromium.png>
-   [exec] (Emacs) {/bin/emacs} </usr/share/icons/hicolor/16x16/apps/emacs.png>
+   [exec] (Emacs) {emacsclient -c} </usr/share/icons/hicolor/16x16/apps/emacs.png>
    [exec] (VirtualBox) {/usr/bin/VirtualBox} </usr/share/pixmaps/VBox.png>
+   [exec] (Athena) {firefox https://athena.ugent.be} <>
    [exec] (Screenshot) {scrot -e 'mv $f ~/Downloads/'}
    [separator]
 
@@ -16,7 +17,14 @@
        [exec] (Okular) {okular} </usr/share/icons/hicolor/16x16/apps/okular.png>
    [end]
 
+   [submenu] (Bookmarks) {}
+       [exec] (Artikels) {thunar /home/christophe/Doctoraat/STR/Doctoraat/Bibliotheek/}
+       [exec] (STR) {/usr/bin/terminator -f --working-directory=~/Dropbox/Doctoraat/STR/Illumina/MyFLqApp}
+       [exec] (Linux-HOWTO's) {/usr/bin/thunar ~/Dropbox/Informatica/Linux}
+   [end]
+
    [submenu] (Extra) {}
+         [exec] (Keepass) {keepassx} </usr/share/pixmaps/keepassx.xpm>
 	 [exec] (Poedit) {poedit} </usr/share/pixmaps/poedit.png>
 	 [exec] (Calibre) {calibre} </usr/share/calibre/images/lt.png>
 	 [exec] (Gedit) {/usr/bin/gedit} <>
@@ -30,3 +38,10 @@
    [separator]
 
 [end]
+
+#Programs used in the past
+#[exec] (System monitor) {/usr/bin/gnome-system-monitor}  </usr/share/pixmaps/gnome-computer.png>
+#[exec] (Nautilus) {/usr/bin/nautilus --no-desktop} </usr/share/pixmaps/nautilus.xpm>
+#[exec] (ROXTerm) {roxterm} </usr/share/pixmaps/xterm-color_32x32.xpm>
+#[exec] (Printers) {/usr/bin/system-config-printer} <> #Ubuntu
+#[exec] (VMPlayer) {/usr/bin/vmplayer} </usr/lib/vmware/share/pixmaps/vmware-player.png>
