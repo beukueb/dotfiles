@@ -21,8 +21,48 @@
 (setq TeX-parse-self t)
 (setq-default TeX-master nil)
 
-;(add-hook 'latex-mode-hook 'visual-line-mode)
+;; (add-hook 'latex-mode-hook 'visual-line-mode)
 (global-visual-line-mode 1)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
-; Spelling
+;; Spelling
 (setq ispell-dictionary "english")
+
+;; Ido
+(require 'ido)
+(ido-mode t)
+
+;; Melpa packages
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(package-initialize)
+;; M-x package-list-packages to browse and install packages
+
+;; Powerline (requires package-initialize)
+(require 'powerline)
+(powerline-default-theme)
+
+;; Git
+;;(add-to-list 'load-path ".../git/contrib/emacs")
+(require 'git)
+;;(require 'git-blame)
+
+;; Org
+(add-to-list 'auto-mode-alist '("\\.HOW_TO\\'" . org-mode))
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+(setq org-log-done 'time)
+
+;; Org code evaluation
+(setq org-confirm-babel-evaluate nil) ;without confirmation
+(require 'ob-sh)                      ;required for sh
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t) (sh . t)))
+(setq org-babel-sh-command "bash")
+
+;; Custom cvn
+(setq cvn "Christophe Van Neste")
