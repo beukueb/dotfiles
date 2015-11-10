@@ -6,7 +6,10 @@
  '(column-number-mode t)
  '(custom-enabled-themes (quote (wombat)))
  '(delete-selection-mode t)
- '(inhibit-startup-screen t))
+ '(inhibit-startup-screen t)
+ '(send-mail-function (quote smtpmail-send-it))
+ '(smtpmail-smtp-server "smtp.ugent.be")
+ '(smtpmail-smtp-service 25))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -36,6 +39,8 @@
 (require 'package)
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 ;; M-x package-list-packages to browse and install packages
 
@@ -55,6 +60,8 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
 (setq org-log-done 'time)
+(setq org-directory "~/Dropbox/Apps/MobileOrg")
+(setq org-default-notes-file (concat org-directory "/notes.org"))
 
 ;; Org code evaluation
 (setq org-confirm-babel-evaluate nil) ;without confirmation
@@ -65,4 +72,5 @@
 (setq org-babel-sh-command "bash")
 
 ;; Custom cvn
+(global-set-key (kbd "C-/") 'completion-at-point)
 (setq cvn "Christophe Van Neste")
