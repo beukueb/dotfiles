@@ -125,9 +125,10 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
     (setenv "PATH" path-from-shell)
     (setq exec-path (split-string path-from-shell path-separator))))
 
-(require 'jedi)
+(require 'jedi) ;for first time use run: M-x jedi:install-server
 (add-to-list 'ac-sources 'ac-source-jedi-direct)
 (add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
 
 ;; Custom cvn
 (global-set-key (kbd "C-/") 'completion-at-point)
