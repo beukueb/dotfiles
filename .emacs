@@ -7,6 +7,7 @@
  '(custom-enabled-themes (quote (wombat)))
  '(delete-selection-mode t)
  '(inhibit-startup-screen t)
+ '(org-agenda-files (quote ("~/Dropbox/Apps/MobileOrg/notes.org")))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.ugent.be")
  '(smtpmail-smtp-service 25))
@@ -17,6 +18,41 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :height 157 :width normal)))))
 
+;; Package management
+(require 'package)
+(package-initialize)
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+;; M-x [package-]list-packages to browse and install packages
+
+;;; CVN package dependencies
+(defvar local-packages '(
+			 projectile
+			 auto-complete
+			 epc
+			 jedi
+			 python-mode
+			 ein ;iPython notebook
+			 bbdb
+			 multiple-cursors
+			 powerline
+			 ))
+
+;;; Automatically install dependencies
+(defun uninstalled-packages (packages)
+  (delq nil
+	(mapcar (lambda (p) (if (package-installed-p p nil) nil p)) packages)))
+
+(let ((need-to-install (uninstalled-packages local-packages)))
+  (when need-to-install
+    (progn
+      (package-refresh-contents)
+      (dolist (p need-to-install)
+	(package-install p)))))
+
+;; Latex
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
 
@@ -34,15 +70,6 @@
 ;; Ido
 (require 'ido)
 (ido-mode t)
-
-;; Melpa packages
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/") t)
-(package-initialize)
-;; M-x package-list-packages to browse and install packages
 
 ;; Powerline (requires package-initialize)
 (require 'powerline)
@@ -70,6 +97,37 @@
  'org-babel-load-languages
  '((python . t) (sh . t)))
 (setq org-babel-sh-command "bash")
+
+;; Projectile
+(require 'projectile)
+(projectile-global-mode)
+
+;; Auto-complete
+(require 'auto-complete-config)
+(ac-config-default)
+
+;; Jedi config
+(defvar jedi-config:use-system-python nil
+  "Will use system python and active environment for Jedi server.
+May be necessary for some GUI environments (e.g., Mac OS X)")
+
+(defvar jedi-config:with-virtualenv nil
+  "Set to non-nil to point to a particular virtualenv.")
+
+(defvar jedi-config:vcs-root-sentinel ".git")
+
+(defvar jedi-config:python-module-sentinel "__init__.py")
+
+(defun set-exec-path-from-shell-PATH ()
+  "Set up Emacs' `exec-path' and PATH environment variable to match that used by the user's shell."
+  (interactive)
+  (let ((path-from-shell (get-shell-output "$SHELL --login -i -c 'echo $PATH'")))
+    (setenv "PATH" path-from-shell)
+    (setq exec-path (split-string path-from-shell path-separator))))
+
+(require 'jedi)
+(add-to-list 'ac-sources 'ac-source-jedi-direct)
+(add-hook 'python-mode-hook 'jedi:setup)
 
 ;; Custom cvn
 (global-set-key (kbd "C-/") 'completion-at-point)
