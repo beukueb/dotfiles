@@ -3,11 +3,17 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(column-number-mode t)
- '(custom-enabled-themes (quote (wombat)))
+ '(custom-enabled-themes (quote (wheatgrass)))
  '(delete-selection-mode t)
  '(inhibit-startup-screen t)
- '(org-agenda-files (quote ("~/Dropbox/Apps/MobileOrg/notes.org")))
+ '(org-agenda-files
+   (quote
+    ("~/Dropbox/LabFBT/notes/nanopore.org" "~/Dropbox/Apps/MobileOrg/notes.org")))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.ugent.be")
  '(smtpmail-smtp-service 25))

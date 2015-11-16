@@ -51,11 +51,13 @@ else
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='\[\033[01;32m\]\u@\h\[\033[01;34m\] \w\[\033[01;33m\]$(__git_ps1)\[\033[01;34m\] \$\[\033[00m\] '
+    PS1='\[\e[1;32m\]\u@\h\[\e[1;31m\] \w\[\e[1;33m\]$(__git_ps1)\[\e[1;35m\] \$\[\e[00m\] '
 else
     PS1='\u@\h \w$(__git_ps1) \$ '
 fi
 unset color_prompt force_color_prompt
+# 00m: white; 31m: red; 32m: green; 33m: yellow; 34m: blue
+# https://wiki.archlinux.org/index.php/Color_Bash_Prompt#List_of_colors_for_prompt_and_Bash
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
