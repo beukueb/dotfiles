@@ -143,10 +143,17 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 ;; C-c <letter> and F5-F9 reserved for user
 (global-set-key (kbd "C-/") 'completion-at-point)
 (setq cvn "Christophe Van Neste")
-(fset 'execute-in-iPython
-   [?\C-k ?\C-y ?\C-u ?\C-  ?\C-x kp-5 ?o escape ?  ?\C-y return ?\C-x kp-5 ?o down])
-(global-set-key (kbd "C-c e") 'execute-in-iPython)
-(global-set-key '[(f5)] 'execute-in-iPython)
+;;; execute statement
+(fset 'execute-line-in-other-frame-term [?\C-k ?\C-y ?\C-u ?\C-
+      ?\C-x kp-5 ?o escape ?  ?\C-y return ?\C-c ?\C-j ?\C-x kp-5
+      ?o down])
+(global-set-key (kbd "C-c e") 'execute-line-in-other-frame-term)
+(global-set-key '[(f5)] 'execute-line-in-other-frame-term)
+;;; execute region
+(fset 'execute-region-in-other-frame-term
+      [?\M-w ?\C-x kp-5 ?o ?% ?p ?a ?s ?t ?e return ?\C-c ?\C-j ?\C-x kp-5 ?o])
+(global-set-key '[(f6)] 'execute-region-in-other-frame-term)
+;;; execute org code block
 (fset 'execute-code-block-in-other-frame-term
    [?\C-c ?\' ?\M-< ?\C-  ?\M-> ?\M-w ?\C-x kp-5 ?o ?% ?p ?a ?s ?t ?e return ?\C-c ?\C-j ?\C-x kp-5 ?o ?\M-< ?\C-c ?\'])
-(global-set-key '[(f6)] 'execute-code-block-in-other-frame-term)
+(global-set-key '[(f7)] 'execute-code-block-in-other-frame-term)
