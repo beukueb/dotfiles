@@ -58,6 +58,9 @@
       (dolist (p need-to-install)
 	(package-install p)))))
 
+;; Session management
+(desktop-save-mode 1)
+
 ;; Latex
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
@@ -137,5 +140,13 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 (setq jedi:complete-on-dot t)
 
 ;; Custom cvn
+;; C-c <letter> and F5-F9 reserved for user
 (global-set-key (kbd "C-/") 'completion-at-point)
 (setq cvn "Christophe Van Neste")
+(fset 'execute-in-iPython
+   [?\C-k ?\C-y ?\C-u ?\C-  ?\C-x kp-5 ?o escape ?  ?\C-y return ?\C-x kp-5 ?o down])
+(global-set-key (kbd "C-c e") 'execute-in-iPython)
+(global-set-key '[(f5)] 'execute-in-iPython)
+(fset 'execute-code-block-in-other-frame-term
+   [?\C-c ?\' ?\M-< ?\C-  ?\M-> ?\M-w ?\C-x kp-5 ?o ?% ?p ?a ?s ?t ?e return ?\C-c ?\C-j ?\C-x kp-5 ?o ?\M-< ?\C-c ?\'])
+(global-set-key '[(f6)] 'execute-code-block-in-other-frame-term)
