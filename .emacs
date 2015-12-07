@@ -1,29 +1,3 @@
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
- '(column-number-mode t)
- '(custom-enabled-themes (quote (wheatgrass)))
- '(delete-selection-mode t)
- '(inhibit-startup-screen t)
- '(org-agenda-files
-   (quote
-    ("~/Dropbox/LabFBT/notes/nanopore.org" "~/Dropbox/Apps/MobileOrg/notes.org")))
- '(send-mail-function (quote smtpmail-send-it))
- '(smtpmail-smtp-server "smtp.ugent.be")
- '(smtpmail-smtp-service 25))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :height 157 :width normal)))))
-
 ;; Package management
 (require 'package)
 (package-initialize)
@@ -44,6 +18,7 @@
 			 bbdb
 			 multiple-cursors
 			 powerline
+			 exec-path-from-shell ;for OS X
 			 ))
 
 ;;; Automatically install dependencies
@@ -66,7 +41,7 @@
 
 ;; Latex
 (load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
+;;(load "preview-latex.el" nil t t)
 
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
@@ -96,7 +71,7 @@
 
 ;; Git
 ;;(add-to-list 'load-path ".../git/contrib/emacs")
-(require 'git)
+;;(require 'git)
 ;;(require 'git-blame)
 
 ;; Org
@@ -116,6 +91,7 @@
  'org-babel-load-languages
  '((python . t) (sh . t)))
 (setq org-babel-sh-command "bash")
+(setq org-src-window-setup 'current-window)
 
 ;; Projectile
 (require 'projectile)
@@ -126,9 +102,17 @@
 (ac-config-default)
 
 ;; Jedi config
+(require 'jedi) ;for first time use run: M-x jedi:install-server
+(add-to-list 'ac-sources 'ac-source-jedi-direct)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
 (defvar jedi-config:use-system-python nil
   "Will use system python and active environment for Jedi server.
 May be necessary for some GUI environments (e.g., Mac OS X)")
+
+(setq jedi:server-command
+      (list "/opt/local/bin/python3.5" jedi:server-script))
 
 (defvar jedi-config:with-virtualenv nil
   "Set to non-nil to point to a particular virtualenv.")
@@ -144,10 +128,10 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
     (setenv "PATH" path-from-shell)
     (setq exec-path (split-string path-from-shell path-separator))))
 
-(require 'jedi) ;for first time use run: M-x jedi:install-server
-(add-to-list 'ac-sources 'ac-source-jedi-direct)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+;; Mac emacs tweaks
+(setq ns-right-alternate-modifier nil)
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
 
 ;; Custom cvn
 ;; C-c <letter> and F5-F9 reserved for user
@@ -166,3 +150,17 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 (fset 'execute-code-block-in-other-frame-term
    [?\C-c ?\' ?\M-< ?\C-  ?\M-> ?\M-w ?\C-x kp-5 ?o ?% ?p ?a ?s ?t ?e return ?\C-c ?\C-j ?\C-x kp-5 ?o ?\M-< ?\C-c ?\'])
 (global-set-key '[(f7)] 'execute-code-block-in-other-frame-term)
+
+;; Automatic Emacs customization
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (wheatgrass))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "black" :foreground "wheat" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "nil" :family "Menlo")))))
