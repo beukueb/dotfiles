@@ -93,6 +93,15 @@
 (setq org-babel-sh-command "bash")
 (setq org-src-window-setup 'current-window)
 
+;; Org beamer export
+(require 'ox-latex)
+(add-to-list 'org-latex-classes
+             '("beamer"
+               "\\documentclass\[presentation\]\{beamer\}"
+               ("\\section\{%s\}" . "\\section*\{%s\}")
+               ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
+               ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
+
 ;; Projectile
 (require 'projectile)
 (projectile-global-mode)

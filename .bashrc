@@ -46,6 +46,10 @@ if [ -f /usr/share/git/completion/git-prompt.sh  ]; then
     #Show git pending changes (needs to be set before PS1) #TODO check if file exists
     source /usr/share/git/completion/git-prompt.sh
     export GIT_PS1_SHOWDIRTYSTATE=1
+elif [ -f /usr/local/git/contrib/completion/git-prompt.sh ]; then
+    #Mac OS X
+    source /usr/local/git/contrib/completion/git-prompt.sh
+    export GIT_PS1_SHOWDIRTYSTATE=1
 else
     function __git_ps1 () { echo ''; }
 fi
@@ -104,6 +108,9 @@ fi
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
+#For Mac OS X
+[[ $PS1 && -f /usr/local/share/bash-completion/bash_completion ]] && \
+    . /usr/local/share/bash-completion/bash_completion
 
 #Personal environment variables
 if [ -f ~/.bash_env ]; then
@@ -111,9 +118,9 @@ if [ -f ~/.bash_env ]; then
 fi
 
 #Virtualenvwrapper
-export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/Projects
-source virtualenvwrapper.sh
+#export WORKON_HOME=$HOME/.virtualenvs
+#export PROJECT_HOME=$HOME/Projects
+#source virtualenvwrapper.sh
 
 #X11
 [[ $(tty) == "/dev/tty1" ]] && exec startx
