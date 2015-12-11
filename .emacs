@@ -143,6 +143,8 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
   (exec-path-from-shell-initialize))
 
 ;; Custom cvn
+;; Switch frames
+(global-set-key (kbd "M-s-<tab>") 'other-frame)
 ;; C-c <letter> and F5-F9 reserved for user
 (global-set-key (kbd "C-/") 'completion-at-point)
 (setq cvn "Christophe Van Neste")

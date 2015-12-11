@@ -122,5 +122,27 @@ fi
 #export PROJECT_HOME=$HOME/Projects
 #source virtualenvwrapper.sh
 
+## Config backup/restore functions
+function backupconfig ()
+{
+    #General public dotfiles
+    ls -A ~/repos/dotfiles/ | grep -v .git | xargs -I {} cp -a ~/{} ~/repos/dotfiles/
+    cd ~/repos/dotfiles/
+    git commit -a -m "${HOSTNAME} config"
+    cd -
+
+    #Private dotfiles
+    ls -A ~/Dropbox/Informatica/dotfiles/ | grep -v .git | xargs -I {} cp -a ~/{} ~/Dropbox/Informatica/dotfiles/
+    cd ~/Dropbox/Informatica/dotfiles/
+    git commit -a -m "${HOSTNAME} $(date '+%y%m%d') config"
+    cd -
+}
+
+function restoreconfig ()
+{
+    ls -A ~/repos/dotfiles/ | grep -v .git | xargs -I {} cp -a ~/repos/dotfiles/{} ~/
+    ls -A ~/Dropbox/Informatica/dotfiles/ | grep -v .git | xargs -I {} cp ~/Dropbox/Informatica/dotfiles/{} ~/
+}
+
 #X11
 [[ $(tty) == "/dev/tty1" ]] && exec startx
