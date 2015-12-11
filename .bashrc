@@ -112,11 +112,6 @@ fi
 [[ $PS1 && -f /usr/local/share/bash-completion/bash_completion ]] && \
     . /usr/local/share/bash-completion/bash_completion
 
-#Personal environment variables
-if [ -f ~/.bash_env ]; then
-    . ~/.bash_env
-fi
-
 #Virtualenvwrapper
 #export WORKON_HOME=$HOME/.virtualenvs
 #export PROJECT_HOME=$HOME/Projects
