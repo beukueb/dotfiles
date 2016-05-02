@@ -15,6 +15,8 @@
 			 jedi
 			 python-mode
 			 ein ;iPython notebook
+			 ess
+			 ess-R-data-view
 			 bbdb
 			 multiple-cursors
 			 powerline
@@ -143,6 +145,8 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
   (exec-path-from-shell-initialize))
 
 ;; Custom cvn
+;; Paste-replace selection
+(delete-selection-mode 1)
 ;; Switch frames
 (global-set-key (kbd "M-s-<tab>") 'other-frame)
 ;; C-c <letter> and F5-F9 reserved for user
@@ -150,9 +154,12 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 (setq cvn "Christophe Van Neste")
 ;;; execute statement
 (fset 'execute-line-in-other-frame-term
-   [?\C-k ?\C-y ?\C-u ?\C-  ?\C-x kp-5 ?o ?\C-c ?\C-j escape ?  ?\C-y return ?\C-x kp-5 ?o down])
+   [?\C-k ?\C-y ?\C-u ?\C-  ?\C-x kp-5 ?o ?\C-c ?\C-j escape ?  ?\C-y return ?\C-c ?\C-k ?\C-c kp-5 ?o down])
 (global-set-key (kbd "C-c e") 'execute-line-in-other-frame-term)
 (global-set-key '[(f5)] 'execute-line-in-other-frame-term)
+(fset 'execute-line-in-other-window-term
+      [?\C-k ?\C-y ?\C-u ?\C-  ?\C-x ?o ?\C-c ?\C-j escape ?  ?\C-y return ?\C-c ?\C-k ?\C-c ?o down])
+(global-set-key '[(M-f5)] 'execute-line-in-other-window-term)
 ;;; execute region
 (fset 'execute-region-in-other-frame-term
       [?\M-w ?\C-x kp-5 ?o ?% ?p ?a ?s ?t ?e return ?\C-c ?\C-j ?\C-x kp-5 ?o])
