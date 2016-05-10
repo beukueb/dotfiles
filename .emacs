@@ -145,6 +145,8 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
   (exec-path-from-shell-initialize))
 
 ;; Custom cvn
+;; Backup directory
+(setq backup-directory-alist `(("." . "~/.emacsaves")))
 ;; Paste-replace selection
 (delete-selection-mode 1)
 ;; Switch frames
