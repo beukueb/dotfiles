@@ -93,6 +93,7 @@
  'org-babel-load-languages
  '((python . t) (sh . t)))
 (setq org-babel-sh-command "bash")
+(setq org-babel-python-command "ipython")
 (setq org-src-window-setup 'current-window)
 
 ;; Org beamer export
