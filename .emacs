@@ -91,7 +91,7 @@
 (require 'ob-sh)                      ;required for sh
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((python . t) (sh . t)))
+ '((python . t) (sh . t) (R . t)))
 (setq org-babel-sh-command "bash")
 (setq org-babel-python-command "ipython --no-banner --classic --no-confirm-exit")
 (setq org-src-window-setup 'current-window)
