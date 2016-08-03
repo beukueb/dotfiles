@@ -139,6 +139,7 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
   (let ((path-from-shell (get-shell-output "$SHELL --login -i -c 'echo $PATH'")))
     (setenv "PATH" path-from-shell)
     (setq exec-path (split-string path-from-shell path-separator))))
+(setenv "PYTHONIOENCODING" "utf-8")
 
 ;; Mac emacs tweaks
 (setq ns-right-alternate-modifier nil)
