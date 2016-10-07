@@ -21,6 +21,7 @@
 			 multiple-cursors
 			 powerline
 			 exec-path-from-shell ;for OS X
+			 async
 			 ))
 
 ;;; Automatically install dependencies
@@ -105,6 +106,14 @@
                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 
+;; Org opening links
+(setq org-link-frame-setup (quote ((vm . vm-visit-folder-other-frame)
+				   (vm-imap . vm-visit-imap-folder-other-frame)
+				   (gnus . org-gnus-no-new-news)
+				   (file . find-file)
+				   (wl . wl-other-frame)))
+      )
+
 ;; Projectile
 (require 'projectile)
 (projectile-global-mode)
@@ -160,18 +169,27 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 (fset 'execute-line-in-other-frame-term
    [?\C-k ?\C-y ?\C-u ?\C-  ?\C-x kp-5 ?o ?\C-c ?\C-j escape ?  ?\C-y return ?\C-c ?\C-k ?\C-c kp-5 ?o down])
 (global-set-key (kbd "C-c e") 'execute-line-in-other-frame-term)
-(global-set-key '[(f5)] 'execute-line-in-other-frame-term)
+(global-set-key '[(M-f5)] 'execute-line-in-other-frame-term)
 (fset 'execute-line-in-other-window-term
       [?\C-k ?\C-y ?\C-u ?\C-  ?\C-x ?o ?\C-c ?\C-j escape ?  ?\C-y return ?\C-c ?\C-k ?\C-c ?o down])
-(global-set-key '[(M-f5)] 'execute-line-in-other-window-term)
+(global-set-key '[(f5)] 'execute-line-in-other-window-term)
 ;;; execute region
 (fset 'execute-region-in-other-frame-term
-      [?\M-w ?\C-x kp-5 ?o ?% ?p ?a ?s ?t ?e return ?\C-c ?\C-j ?\C-x kp-5 ?o])
-(global-set-key '[(f6)] 'execute-region-in-other-frame-term)
+      [?\M-w ?\C-x kp-5 ?o ?% ?p ?a ?s ?t ?e return ?\C-c kp-5 ?o])
+(global-set-key '[(M-f6)] 'execute-region-in-other-frame-term)
+(fset 'execute-region-in-other-window-term
+      [?\M-w ?\C-x ?o ?% ?p ?a ?s ?t ?e return ?\C-c ?o])
+(global-set-key '[(f6)] 'execute-region-in-other-window-term)
 ;;; execute org code block
 (fset 'execute-code-block-in-other-frame-term
    [?\C-c ?\' ?\M-< ?\C-  ?\M-> ?\M-w ?\C-x kp-5 ?o ?% ?p ?a ?s ?t ?e return ?\C-c ?\C-j ?\C-x kp-5 ?o ?\M-< ?\C-c ?\'])
 (global-set-key '[(f7)] 'execute-code-block-in-other-frame-term)
+;; term char mode keybindings
+(fset 'paste-in-char-term
+      [?\C-e ?\C-c ?\C-j ?\s-v return ?\C-c ?\C-k])
+(add-hook 'term-load-hook
+	  (lambda ()
+	    (define-key term-raw-map (kbd "s-v") 'paste-in-char-term)))
 
 ;; Automatic Emacs customization
 (custom-set-variables
