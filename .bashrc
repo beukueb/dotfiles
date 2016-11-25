@@ -127,7 +127,8 @@ function backupconfig ()
     cd -
 
     #Private dotfiles
-    ls -A ~/Dropbox/Informatica/dotfiles/ | grep -v .git | xargs -I {} cp -a ~/{} ~/Dropbox/Informatica/dotfiles/
+    ls -A ~/Dropbox/Informatica/dotfiles/ | grep -v -e .git -e ssh | xargs -I {} cp -a ~/{} ~/Dropbox/Informatica/dotfiles/
+    cp ~/.ssh/config ~/Dropbox/Informatica/dotfiles/.ssh/
     cd ~/Dropbox/Informatica/dotfiles/
     git commit -a -m "${HOSTNAME} $(date '+%y%m%d') config"
     cd -
@@ -136,7 +137,8 @@ function backupconfig ()
 function restoreconfig ()
 {
     ls -A ~/repos/dotfiles/ | grep -v .git | xargs -I {} cp -a ~/repos/dotfiles/{} ~/
-    ls -A ~/Dropbox/Informatica/dotfiles/ | grep -v .git | xargs -I {} cp ~/Dropbox/Informatica/dotfiles/{} ~/
+    ls -A ~/Dropbox/Informatica/dotfiles/ | grep -v -e .git -e ssh | xargs -I {} cp ~/Dropbox/Informatica/dotfiles/{} ~/
+    cp ~/Dropbox/Informatica/dotfiles/.ssh/config ~/.ssh/config
 }
 
 #X11
