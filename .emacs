@@ -186,7 +186,7 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 (global-set-key '[(f7)] 'execute-code-block-in-other-frame-term)
 ;; term char mode keybindings
 (fset 'paste-in-char-term
-      [?\C-e ?\C-c ?\C-j ?\s-v return ?\C-c ?\C-k])
+      [?\C-e ?\C-c ?\C-j ?\s-v ?\C-c ?\C-k])
 (add-hook 'term-load-hook
 	  (lambda ()
 	    (define-key term-raw-map (kbd "s-v") 'paste-in-char-term)))
