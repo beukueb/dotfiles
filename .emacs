@@ -180,10 +180,18 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 (fset 'execute-region-in-other-window-term
       [?\M-w ?\C-x ?o ?% ?p ?a ?s ?t ?e return ?\C-c ?o])
 (global-set-key '[(f6)] 'execute-region-in-other-window-term)
+;;; copy region to /tmp/pythonpaste.ipy and run in console
+(fset 'runpy [?\M-w ?\C-x ?\C-f ?\C-f ?/ ?t ?m ?p ?/ ?p ?y ?t ?h
+   ?o ?n ?p ?a ?s ?t ?e ?. ?i ?p ?y return ?\C- ?\M-> backspace
+   ?\C-y ?\C-x ?\C-s ?\C-x ?k return ?\C-x ?5 ?o ?% ?r ?u
+   ?n ? ?- ?i ?  ?/ ?t ?m ?p ?/ ?p ?y ?t ?h ?o ?n ?p ?a ?s ?t ?e ?. ?i
+   ?p ?y return ?\C-c ?5 ?o])
+(global-set-key '[(f7)] 'runpy)
+
 ;;; execute org code block
 (fset 'execute-code-block-in-other-frame-term
    [?\C-c ?\' ?\M-< ?\C-  ?\M-> ?\M-w ?\C-x kp-5 ?o ?% ?p ?a ?s ?t ?e return ?\C-c ?\C-j ?\C-x kp-5 ?o ?\M-< ?\C-c ?\'])
-(global-set-key '[(f7)] 'execute-code-block-in-other-frame-term)
+;;(global-set-key '[(f7)] 'execute-code-block-in-other-frame-term)
 ;; term char mode keybindings
 (fset 'paste-in-char-term
       [?\C-e ?\C-c ?\C-j ?\s-v ?\C-c ?\C-k])
