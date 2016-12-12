@@ -38,6 +38,7 @@
 
 ;; Session management
 (desktop-save-mode 1)
+(setq desktop-restore-forces-onscreen nil)
 
 ;; Tramp for remote access
 (setq tramp-default-method "ssh")
