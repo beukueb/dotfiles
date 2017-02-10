@@ -95,7 +95,8 @@
  'org-babel-load-languages
  '((python . t) (sh . t) (R . t)))
 (setq org-babel-sh-command "bash")
-(setq org-babel-python-command "ipython --no-banner --classic --no-confirm-exit")
+;; (setq org-babel-python-command "ipython --no-banner --classic --no-confirm-exit")
+(setq org-babel-python-command "python")
 (setq org-src-window-setup 'current-window)
 
 ;; Org beamer export
@@ -168,7 +169,7 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 (setq cvn "Christophe Van Neste")
 ;;; execute statement
 (fset 'execute-line-in-other-frame-term
-   [?\C-k ?\C-y ?\C-u ?\C-  ?\C-x kp-5 ?o ?\C-c ?\C-j escape ?  ?\C-y return ?\C-c ?\C-k ?\C-c kp-5 ?o down])
+   [?\C-k ?\C-y ?\C-u ?\C-  ?\C-x kp-5 ?o down ?\C-c ?\C-j escape ?  ?\C-y return ?\C-c ?\C-k ?\C-c kp-5 ?o down])
 (global-set-key (kbd "C-c e") 'execute-line-in-other-frame-term)
 (global-set-key '[(M-f5)] 'execute-line-in-other-frame-term)
 (fset 'execute-line-in-other-window-term
