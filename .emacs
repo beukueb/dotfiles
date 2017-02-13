@@ -124,7 +124,8 @@
 (require 'auto-complete-config)
 (ac-config-default)
 
-;; Jedi config
+;; Python/jedi config
+(add-to-list 'auto-mode-alist '("\\.ipy\\'" . python-mode))
 (require 'jedi) ;for first time use run: M-x jedi:install-server
 (add-to-list 'ac-sources 'ac-source-jedi-direct)
 (add-hook 'python-mode-hook 'jedi:setup)
