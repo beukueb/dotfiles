@@ -22,6 +22,7 @@
 			 powerline
 			 exec-path-from-shell ;for OS X
 			 async
+			 yasnippet
 			 ))
 
 ;;; Automatically install dependencies
@@ -77,6 +78,11 @@
 ;;(add-to-list 'load-path ".../git/contrib/emacs")
 ;;(require 'git)
 ;;(require 'git-blame)
+
+;; Snippets
+(require 'yasnippet)
+(yas-reload-all)
+(add-hook 'python-mode-hook 'yas-minor-mode)
 
 ;; Org
 (add-to-list 'auto-mode-alist '("\\.HOW_TO\\'" . org-mode))
@@ -136,7 +142,7 @@
 May be necessary for some GUI environments (e.g., Mac OS X)")
 
 (setq jedi:server-command
-      (list "/opt/local/bin/python3.5" jedi:server-script))
+      (list "/usr/local/bin/python3" jedi:server-script))
 
 (defvar jedi-config:with-virtualenv nil
   "Set to non-nil to point to a particular virtualenv.")
@@ -209,7 +215,10 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (wheatgrass))))
+ '(custom-enabled-themes (quote (wheatgrass)))
+ '(package-selected-packages
+   (quote
+    (yasnippet tide ## python-mode projectile powerline multiple-cursors jedi exec-path-from-shell ess-R-data-view ein bbdb auctex async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
