@@ -227,3 +227,4 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :background "black" :foreground "wheat" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "nil" :family "Menlo")))))
+(put 'dired-find-alternate-file 'disabled nil)
