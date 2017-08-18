@@ -141,5 +141,14 @@ function restoreconfig ()
     cp ~/Dropbox/Informatica/dotfiles/.ssh/config ~/.ssh/config
 }
 
+function searchlib ()
+{
+    searchdir=~/Dropbox/Science/Library
+    echo Searching $searchdir for $1
+    cd $searchdir 
+    find . -name '*.pdf' -exec pdfgrep -Hin -m1 $1 {} \;
+    cd -
+}
+
 #X11
 [[ $(tty) == "/dev/tty1" ]] && exec startx

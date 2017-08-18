@@ -17,6 +17,7 @@
 			 ein ;iPython notebook
 			 ess
 			 ess-R-data-view
+			 yaml-mode
 			 bbdb
 			 multiple-cursors
 			 powerline
@@ -83,6 +84,7 @@
 (require 'yasnippet)
 (yas-reload-all)
 (add-hook 'python-mode-hook 'yas-minor-mode)
+(add-hook 'yaml-mode-hook 'yas-minor-mode)
 
 ;; Org
 (add-to-list 'auto-mode-alist '("\\.HOW_TO\\'" . org-mode))
