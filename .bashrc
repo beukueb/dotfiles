@@ -146,7 +146,7 @@ function searchlib ()
     searchdir=~/Dropbox/Science/Library
     echo Searching $searchdir for $1
     cd $searchdir 
-    find . -name '*.pdf' -exec pdfgrep -Hin -m1 $1 {} \;
+    find . -name '*.pdf' -exec pdfgrep -Hin -m1 "$1" {} \;
     cd -
 }
 
