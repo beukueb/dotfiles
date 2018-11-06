@@ -150,5 +150,14 @@ function searchlib ()
     cd -
 }
 
+function sshmnt ()
+{
+    if [[ ! -d ~/mnt/$1 ]]; then
+	mkdir ~/mnt/$1
+    fi
+    if [[ -v $2 ]]; then REMLOC=$2; else REMLOC=`ssh $1 'echo $HOME'`; fi
+    sshfs $1:$REMLOC ~/mnt/$1
+}
+
 #X11
 [[ $(tty) == "/dev/tty1" ]] && exec startx
