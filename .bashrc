@@ -150,6 +150,8 @@ function searchlib ()
     cd -
 }
 
+function doi2bib () { curl -H "Accept: application/x-bibtex" data.crossref.org/$1; }
+
 function sshmnt ()
 {
     if [[ ! -d ~/mnt/$1 ]]; then
