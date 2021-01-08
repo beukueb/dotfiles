@@ -98,7 +98,7 @@
 
 ;; Org code evaluation
 (setq org-confirm-babel-evaluate nil) ;without confirmation
-(require 'ob-sh)                      ;required for sh
+(require 'ob-shell)                      ;required for sh
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((python . t) (sh . t) (R . t)))
