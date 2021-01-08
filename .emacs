@@ -1,3 +1,8 @@
+;; cl warning
+;; Remove when $ grep 'require' .emacs.d/elpa/*/*.el | grep 'cl)'
+;; does not return any packages
+(setq byte-compile-warnings '(cl-functions))
+
 ;; Package management
 (require 'package)
 (package-initialize)
@@ -101,7 +106,7 @@
 (require 'ob-shell)                      ;required for sh
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((python . t) (sh . t) (R . t)))
+ '((python . t) (shell . t) (R . t)))
 (setq org-babel-sh-command "bash")
 ;; (setq org-babel-python-command "ipython --no-banner --classic --no-confirm-exit")
 (setq org-babel-python-command "python")
