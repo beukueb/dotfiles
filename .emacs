@@ -111,6 +111,7 @@
 ;; (setq org-babel-python-command "ipython --no-banner --classic --no-confirm-exit")
 (setq org-babel-python-command "python")
 (setq org-src-window-setup 'current-window)
+(require 'org-tempo) ;for <s tab expansions
 
 ;; Org beamer export
 (require 'ox-latex)

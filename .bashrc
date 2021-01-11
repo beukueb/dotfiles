@@ -2,7 +2,12 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-# If not running interactively, don't do anything
+if [ ! -v CVN_PATH_SET ]; then
+    export PATH=/usr/local/bin:$PATH;
+    export CVN_PATH_SET=;
+fi
+
+# If not running interactively, don't do anything else
 [ -z "$PS1" ] && return
 
 # don't put duplicate lines in the history. See bash(1) for more options
