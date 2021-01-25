@@ -3,6 +3,7 @@
 ;; does not return any packages
 (setq byte-compile-warnings '(cl-functions))
 
+
 ;; Package management
 (require 'package)
 (package-initialize)
@@ -12,8 +13,10 @@
              '("melpa" . "https://melpa.org/packages/") t)
 ;; M-x [package-]list-packages to browse and install packages
 
+
 ;;; CVN package dependencies
 (defvar local-packages '(
+			 use-package ; to put package configs in separate sections
 			 projectile
 			 auto-complete
 			 epc
@@ -29,6 +32,10 @@
 			 exec-path-from-shell ;for OS X
 			 async
 			 yasnippet
+			 org-brain
+			 polymode ; org-brain optional dependency
+			 org-noter
+			 pdf-tools
 			 ))
 
 ;;; Automatically install dependencies
@@ -43,12 +50,39 @@
       (dolist (p need-to-install)
 	(package-install p)))))
 
+
+;; Snippets
+(require 'yasnippet)
+(yas-reload-all)
+(add-hook 'python-mode-hook 'yas-minor-mode)
+(add-hook 'yaml-mode-hook 'yas-minor-mode)
+
+
+;; Automatic Emacs customization
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes '(wheatgrass))
+ '(package-selected-packages
+   '(yasnippet tide ## python-mode projectile powerline multiple-cursors jedi exec-path-from-shell ess-R-data-view ein bbdb auctex async)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "black" :foreground "wheat" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "nil" :family "Menlo")))))
+
+
 ;; Session management
 (desktop-save-mode 1)
 (setq desktop-restore-forces-onscreen nil)
 
+
 ;; Tramp for remote access
 (setq tramp-default-method "ssh")
+
 
 ;; Latex
 (load "auctex.el" nil t t)
@@ -62,16 +96,20 @@
 (global-visual-line-mode 1)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
+
 ;; Spelling
 (setq ispell-dictionary "english")
+
 
 ;; Ido
 (require 'ido)
 (ido-mode t)
 
+
 ;; Powerline (requires package-initialize)
 (require 'powerline)
 (powerline-default-theme)
+
 
 ;; Multiple cursors
 (require 'multiple-cursors)
@@ -80,16 +118,12 @@
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
+
 ;; Git
 ;;(add-to-list 'load-path ".../git/contrib/emacs")
 ;;(require 'git)
 ;;(require 'git-blame)
 
-;; Snippets
-(require 'yasnippet)
-(yas-reload-all)
-(add-hook 'python-mode-hook 'yas-minor-mode)
-(add-hook 'yaml-mode-hook 'yas-minor-mode)
 
 ;; Org
 (add-to-list 'auto-mode-alist '("\\.HOW_TO\\'" . org-mode))
@@ -129,6 +163,32 @@
 				   (file . find-file)
 				   (wl . wl-other-frame)))
       )
+
+;;; org-brain
+;; org-brain configuration
+(use-package org-brain :ensure t
+  :init
+  (setq org-brain-path "~/Dropbox/Science/MindMap")
+  (setq org-capture-templates
+      '()) ; see https://orgmode.org/manual/Capture-templates.html
+  :config
+  (bind-key "C-c b" 'org-brain-prefix-map org-mode-map)
+  (setq org-id-track-globally t)
+  (setq org-id-locations-file "~/.emacs.d/.org-id-locations")
+  (add-hook 'before-save-hook #'org-brain-ensure-ids-in-buffer)
+  (push '("b" "Brain" plain (function org-brain-goto-end)
+          "* %i%?" :empty-lines 1)
+        org-capture-templates)
+  (setq org-brain-visualize-default-choices 'all)
+  (setq org-brain-title-max-length 12)
+  (setq org-brain-include-file-entries nil
+        org-brain-file-entries-use-title nil))
+
+;; Allows you to edit entries directly from org-brain-visualize
+(use-package polymode
+  :config
+  (add-hook 'org-brain-visualize-mode-hook #'org-brain-polymode))
+
 
 ;; Projectile
 (require 'projectile)
@@ -173,16 +233,20 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
-;; Custom cvn
+;;; Custom cvn
 ;; Backup directory
 (setq backup-directory-alist `(("." . "~/.emacs.d/autosaves")))
+
 ;; Paste-replace selection
 (delete-selection-mode 1)
+(put 'dired-find-alternate-file 'disabled nil)
+
 ;; Switch frames
 (global-set-key (kbd "M-s-<tab>") 'other-frame)
 ;; C-c <letter> and F5-F9 reserved for user
 (global-set-key (kbd "C-/") 'completion-at-point)
 (setq cvn "Christophe Van Neste")
+
 ;;; execute statement
 (fset 'execute-line-in-other-frame-term
    [?\C-k ?\C-y ?\C-u ?\C-  ?\C-x kp-5 ?o down ?\C-c ?\C-j escape ?  ?\C-y return ?\C-c ?\C-k ?\C-c kp-5 ?o down])
@@ -191,6 +255,7 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 (fset 'execute-line-in-other-window-term
       [?\C-k ?\C-y ?\C-u ?\C-  ?\C-x ?o ?\C-c ?\C-j escape ?  ?\C-y return ?\C-c ?\C-k ?\C-c ?o down])
 (global-set-key '[(f5)] 'execute-line-in-other-window-term)
+
 ;;; execute region
 (fset 'execute-region-in-other-frame-term
       [?\M-w ?\C-x kp-5 ?o ?% ?p ?a ?s ?t ?e return ?\C-c kp-5 ?o])
@@ -198,6 +263,7 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 (fset 'execute-region-in-other-window-term
       [?\M-w ?\C-x ?o ?% ?p ?a ?s ?t ?e return ?\C-c ?o])
 (global-set-key '[(f6)] 'execute-region-in-other-window-term)
+
 ;;; copy region to /tmp/pythonpaste.ipy and run in console
 (fset 'runpy [?\M-w ?\C-x ?\C-f ?\C-f ?/ ?t ?m ?p ?/ ?p ?y ?t ?h
    ?o ?n ?p ?a ?s ?t ?e ?. ?i ?p ?y return ?\C- ?\M-> backspace
@@ -217,20 +283,8 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 	  (lambda ()
 	    (define-key term-raw-map (kbd "s-v") 'paste-in-char-term)))
 
-;; Automatic Emacs customization
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (wheatgrass)))
- '(package-selected-packages
-   (quote
-    (yasnippet tide ## python-mode projectile powerline multiple-cursors jedi exec-path-from-shell ess-R-data-view ein bbdb auctex async))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "black" :foreground "wheat" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "nil" :family "Menlo")))))
-(put 'dired-find-alternate-file 'disabled nil)
+;; CVN key bindings
+;; C-z is unset to liberate it for personal key bindings
+;; the frame can still be suspended by double C-z
+(global-unset-key (kbd "C-z"))
+(global-set-key (kbd "C-z C-z") 'suspend-frame)
