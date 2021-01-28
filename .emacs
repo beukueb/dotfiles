@@ -189,6 +189,20 @@
   :config
   (add-hook 'org-brain-visualize-mode-hook #'org-brain-polymode))
 
+;; org-noter
+;; hook so entries have id and are displayed in org-brain
+(add-hook 'org-noter-insert-heading-hook #'org-id-get-create)
+;; function to open noter from brain
+(defun org-brain-open-org-noter (entry)
+    "Open `org-noter' on the ENTRY.
+If run interactively, get ENTRY from context."
+    (interactive (list (org-brain-entry-at-pt)))
+    (org-with-point-at (org-brain-entry-marker entry)
+      (org-noter)))
+;; Linking to C-c n (undefined in org-brain keymap)
+(define-key org-brain-visualize-mode-map
+  (kbd "\C-c n") #'org-brain-open-org-noter)
+
 
 ;; Projectile
 (require 'projectile)
@@ -234,6 +248,8 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
   (exec-path-from-shell-initialize))
 
 ;;; Custom cvn
+(setq-default major-mode 'text-mode)
+
 ;; Backup directory
 (setq backup-directory-alist `(("." . "~/.emacs.d/autosaves")))
 
@@ -283,8 +299,8 @@ May be necessary for some GUI environments (e.g., Mac OS X)")
 	  (lambda ()
 	    (define-key term-raw-map (kbd "s-v") 'paste-in-char-term)))
 
-;; CVN key bindings
-;; C-z is unset to liberate it for personal key bindings
+;; CVN keybindings
+;; C-z is unset to liberate it for personal keybindings
 ;; the frame can still be suspended by double C-z
 (global-unset-key (kbd "C-z"))
 (global-set-key (kbd "C-z C-z") 'suspend-frame)
