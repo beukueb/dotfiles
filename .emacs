@@ -16,22 +16,33 @@
 
 ;;; CVN package dependencies
 (defvar local-packages '(
-			 use-package ; to put package configs in separate sections
+			 ; to put package configs in separate sections
+			 use-package
 			 projectile
 			 auto-complete
+			 ; python
 			 epc
 			 jedi
 			 python-mode
 			 ein ;iPython notebook
+			 ; R
 			 ess
 			 ess-R-data-view
 			 yaml-mode
+			 ; go
+			 go-mode
+			 go-complete
+			 go-autocomplete
+			 autopair
+			 ; contact management
 			 bbdb
+			 ; utilities
 			 multiple-cursors
 			 powerline
 			 exec-path-from-shell ;for OS X
 			 async
 			 yasnippet
+			 ; org
 			 org-brain
 			 polymode ; org-brain optional dependency
 			 org-noter
@@ -66,7 +77,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(wheatgrass))
  '(package-selected-packages
-   '(yasnippet tide ## python-mode projectile powerline multiple-cursors jedi exec-path-from-shell ess-R-data-view ein bbdb auctex async)))
+   '(yasnippet-snippets go-mode yasnippet tide ## python-mode projectile powerline multiple-cursors jedi exec-path-from-shell ess-R-data-view ein bbdb auctex async)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -166,5 +166,18 @@ function sshmnt ()
     sshfs $1:$REMLOC ~/mnt/$1
 }
 
+#Python envs
+function mkvirtualenv ()
+{
+    python3 -m venv ~/.envs/$1 && workon $1
+    complete -W "$(ls ~/.envs)" workon
+}
+
+function workon ()
+{
+    . ~/.envs/$1/bin/activate
+}
+complete -W "$(ls ~/.envs)" workon
+
 #X11
 [[ $(tty) == "/dev/tty1" ]] && exec startx
