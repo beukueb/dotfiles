@@ -167,17 +167,65 @@ function sshmnt ()
 }
 
 #Python envs
+PYTHONENVS=~/.envs
 function mkvirtualenv ()
 {
-    python3 -m venv ~/.envs/$1 && workon $1
-    complete -W "$(ls ~/.envs)" workon
+    local envname arg projdir localhist pyversion
+    envname=$1
+    shift
+    while getopts 'a:p:h' arg
+    do
+	case ${arg} in
+            a) projdir=${OPTARG};;
+            p) pyversion=${OPTARG};;
+	    h) localhist=;;
+            *) return 1 # illegal option
+        esac
+    done
+    if [ -v pyversion ]; then pyversion=python3; fi
+    python3 -m venv $PYTHONENVS/$envname
+    complete -W "$(ls $PYTHONENVS)" workon
+    # Setup projdir
+    if [ -v projdir ]
+    then
+	ln -s $projdir $PYTHONENVS/$envname/project
+	cd $projdir
+    fi
+    if [ -v localhist ]; then touch $PYTHONENVS/$envname/.bash_history; fi
+    workon $envname
+}
+
+function rmvirtualenv ()
+{
+    rm -rf $PYTHONENVS/$1
+    complete -W "$(ls $PYTHONENVS)" workon
 }
 
 function workon ()
 {
-    . ~/.envs/$1/bin/activate
+    . $PYTHONENVS/$1/bin/activate
+    if [ -d $PYTHONENVS/$1/project ]
+    then cd $(readlink $PYTHONENVS/$1/project)
+    fi
+    if [ -f $PYTHONENVS/$1/.bash_history ]
+    then
+	if [ ! -v DEF_HISTFILE ]; then DEF_HISTFILE=$HISTFILE; fi
+	PROMPT_COMMAND="history -a; history -c; history -r;" #$PROMPT_COMMAND"
+	HISTFILE=$PYTHONENVS/$1/.bash_history
+	function deactivate(){
+	    HISTFILE=$DEF_HISTFILE;
+	    unset DEF_HISTFILE
+	    unset PROMPT_COMMAND
+	    . $VIRTUAL_ENV/bin/activate
+	    deactivate
+	}
+    fi
+    if [ -f $PYTHONENVS/$1/project/README.md ] #&& emacsclient -a false -e 't'
+    then emacsclient -n -u -e '(find-file "README.md")' '(search-forward "TODO")' \
+		     "(select-frame-set-input-focus (selected-frame))"
+    fi
 }
-complete -W "$(ls ~/.envs)" workon
+complete -W "$(ls $PYTHONENVS)" workon
 
 #X11
 [[ $(tty) == "/dev/tty1" ]] && exec startx
