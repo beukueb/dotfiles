@@ -170,15 +170,16 @@ function sshmnt ()
 PYTHONENVS=~/.envs
 function mkvirtualenv ()
 {
-    local envname arg projdir localhist pyversion
+    local envname arg projdir localhist ipyhist pyversion
     envname=$1
     shift
-    while getopts 'a:p:h' arg
+    while getopts 'a:p:hi' arg
     do
 	case ${arg} in
             a) projdir=${OPTARG};;
             p) pyversion=${OPTARG};;
 	    h) localhist=;;
+	    i) ipyhist=;;
             *) return 1 # illegal option
         esac
     done
@@ -192,6 +193,7 @@ function mkvirtualenv ()
 	cd $projdir
     fi
     if [ -v localhist ]; then touch $PYTHONENVS/$envname/.bash_history; fi
+    if [ -v ipyhist ]; then ipython profile create $envname; fi
     workon $envname
 }
 
@@ -199,6 +201,7 @@ function rmvirtualenv ()
 {
     rm -rf $PYTHONENVS/$1
     complete -W "$(ls $PYTHONENVS)" workon
+    if [ -d ~/.ipython/profile_$1 ]; then rm -rf ~/.ipython/profile_$1; fi
 }
 
 function workon ()
@@ -216,9 +219,21 @@ function workon ()
 	    HISTFILE=$DEF_HISTFILE;
 	    unset DEF_HISTFILE
 	    unset PROMPT_COMMAND
+	    unalias ipython >/dev/null 2>&1
 	    . $VIRTUAL_ENV/bin/activate
 	    deactivate
 	}
+    fi
+    if [ -d ~/.ipython/profile_$1 ]
+    then
+	alias ipython="ipython --profile=$1"
+	if [ ! -v DEF_HISTFILE ]; then
+	    function deactivate(){
+		unalias ipython >/dev/null 2>&1
+		. $VIRTUAL_ENV/bin/activate
+		deactivate
+	    }
+	fi
     fi
     if [ -f $PYTHONENVS/$1/project/README.md ] #&& emacsclient -a false -e 't'
     then emacsclient -n -u -e '(find-file "README.md")' '(search-forward "TODO")' \
