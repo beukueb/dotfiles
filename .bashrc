@@ -166,6 +166,9 @@ function sshmnt ()
     sshfs $1:$REMLOC ~/mnt/$1
 }
 
+#Git functions
+function gic () { git $1 origin  $(git rev-parse --abbrev-ref HEAD); }
+
 #Python envs
 PYTHONENVS=~/.envs
 function mkvirtualenv ()
