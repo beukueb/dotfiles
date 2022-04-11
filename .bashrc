@@ -245,5 +245,11 @@ function workon ()
 }
 complete -W "$(ls $PYTHONENVS)" workon
 
+#Make current dir project dir for virtualenv
+function workondir ()
+{
+    if [ -v VIRTUAL_ENV ]; then ln -sfhv $(pwd) $VIRTUAL_ENV/project; fi
+}
+
 #X11
 [[ $(tty) == "/dev/tty1" ]] && exec startx
