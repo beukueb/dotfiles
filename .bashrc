@@ -168,6 +168,11 @@ function sshmnt ()
 
 #Git functions
 function gic () { git $1 origin  $(git rev-parse --abbrev-ref HEAD); }
+function gin () { # Fetch new remote branch
+    newbranch=$(git remote show origin | grep new | tr -s ' ' | cut -f2 -d' ')
+    git fetch origin $newbranch
+    git checkout $newbranch
+}
 
 #Python envs
 PYTHONENVS=~/.envs
