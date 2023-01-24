@@ -77,7 +77,8 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(wheatgrass))
  '(package-selected-packages
-   '(yasnippet-snippets go-mode yasnippet tide ## python-mode projectile powerline multiple-cursors jedi exec-path-from-shell ess-R-data-view ein bbdb auctex async)))
+   '(paradox yasnippet-snippets go-mode yasnippet tide ## python-mode projectile powerline multiple-cursors jedi exec-path-from-shell ess-R-data-view ein bbdb auctex async))
+ '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -143,7 +144,7 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
 (setq org-log-done 'time)
-(setq org-directory "~/Dropbox/Apps/MobileOrg")
+(setq org-directory "~/SynologyDrive/Apps/MobileOrg")
 (setq org-default-notes-file (concat org-directory "/notes.org"))
 
 ;; Org code evaluation
@@ -179,7 +180,7 @@
 ;; org-brain configuration
 (use-package org-brain :ensure t
   :init
-  (setq org-brain-path "~/Dropbox/Science/MindMap")
+  (setq org-brain-path "~/SynologyDrive/MindMap")
   (setq org-capture-templates
       '()) ; see https://orgmode.org/manual/Capture-templates.html
   :config
@@ -232,13 +233,14 @@ If run interactively, get ENTRY from context."
 
 (defvar jedi-config:use-system-python nil
   "Will use system python and active environment for Jedi server.
-May be necessary for some GUI environments (e.g., Mac OS X)")
+May be necessary for some GUI environments (e.g., Mac OS X)
+virtualenv should be installed for the server-command python")
 
-(setq jedi:server-command
-      (list "/usr/local/bin/python3" jedi:server-script))
+;(setq jedi:server-command
+;      (list "/usr/local/bin/python3" jedi:server-script))
 
-(defvar jedi-config:with-virtualenv nil
-  "Set to non-nil to point to a particular virtualenv.")
+;(defvar jedi-config:with-virtualenv nil
+;  "Set to non-nil to point to a particular virtualenv.")
 
 (defvar jedi-config:vcs-root-sentinel ".git")
 
