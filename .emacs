@@ -3,26 +3,31 @@
 ;; does not return any packages
 (setq byte-compile-warnings '(cl-functions))
 
-
 ;; Package management
 (require 'package)
-(package-initialize)
+(add-to-list 'package-archives
+	     '("gnu"   . "https://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
 ;; M-x [package-]list-packages to browse and install packages
 
+;;; use-package setup
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(eval-and-compile
+  (setq use-package-always-ensure t
+        use-package-expand-minimally t))
 
-;;; CVN package dependencies
+;;; non-use-package dependencies
 (defvar local-packages '(
 			 ; to put package configs in separate sections
-			 use-package
-			 projectile
 			 auto-complete
 			 ; python
 			 epc
-			 jedi
 			 python-mode
 			 ein ;iPython notebook
 			 ; R
@@ -33,7 +38,7 @@
 			 go-mode
 			 go-complete
 			 go-autocomplete
-			 autopair
+			 ; autopair
 			 ; contact management
 			 bbdb
 			 ; utilities
@@ -41,12 +46,12 @@
 			 powerline
 			 exec-path-from-shell ;for OS X
 			 async
-			 yasnippet
 			 ; org
 			 org-brain
 			 polymode ; org-brain optional dependency
 			 org-noter
 			 pdf-tools
+			 csv-mode
 			 ))
 
 ;;; Automatically install dependencies
@@ -62,11 +67,60 @@
 	(package-install p)))))
 
 
-;; Snippets
-(require 'yasnippet)
-(yas-reload-all)
-(add-hook 'python-mode-hook 'yas-minor-mode)
-(add-hook 'yaml-mode-hook 'yas-minor-mode)
+;; Operating system specific setup ;;
+
+;; macOS mods
+( when (memq system-type '(darwin))
+  (defun set-exec-path-from-shell-PATH ()
+  "Set up Emacs' `exec-path' and PATH environment variable to
+match that used by the user's shell. Mac GUI started programs
+do not have access to regular env variables."
+  (interactive)
+  (let ((path-from-shell (get-shell-output "$SHELL --login -i -c 'echo -n $PATH'")))
+    (setenv "PATH" path-from-shell)
+    (setq exec-path (split-string path-from-shell path-separator))))
+  (setenv "PYTHONIOENCODING" "utf-8")
+  (setenv "PYTHONPATH" (shell-command-to-string "$SHELL --login -c 'echo -n $PYTHONPATH'"))
+  
+  (setq ns-right-alternate-modifier nil)
+  (when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize))
+)
+
+
+;; Windows mods
+( when (memq system-type '(cygwin windows-nt))
+  (setq-default visible-bell t)
+  (setq-default buffer-file-coding-system 'utf-8-unix)
+  (setq exec-path (append '("/usr/bin" "/usr/local/bin")
+                          exec-path))
+  (setenv "PATH" "/usr/local/bin:/usr/bin:/bin")
+  ;(defun eshell-path-windows-hook ()
+  ;  "Addpath on eshell mode creation"
+  ;  (eshell/addpath "/bin/")
+  ;  (eshell/addpath "-b" "/usr/bin/")
+  ;  (eshell/addpath "-b" "/usr/local/bin/"))
+  ;(add-hook 'eshell-mode-hook 'eshell-path-windows-hook)
+  ;; https://www.emacswiki.org/emacs/AnsiColor
+  (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on) ; to avoid strange codes
+  (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
+  ;;(require 'fakecygpty) ;; windows-nt only
+  ;;(fakecygpty-activate)
+  (defun run-bash ()
+      (interactive)
+      (let ((shell-file-name "/bin/bash"))
+        (shell "*bash*")))
+  (defun run-cmdexe ()
+      (interactive)
+      (let ((shell-file-name "cmd.exe"))
+        (shell "*cmd.exe*")))
+  (defun run-powershell ()
+  "Run powershell"
+  (interactive)
+  (async-shell-command "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -Command -"
+               nil
+               nil))
+)
 
 
 ;; Automatic Emacs customization
@@ -77,14 +131,24 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(wheatgrass))
  '(package-selected-packages
-   '(paradox yasnippet-snippets go-mode yasnippet tide ## python-mode projectile powerline multiple-cursors jedi exec-path-from-shell ess-R-data-view ein bbdb auctex async))
+   '(yasnippet yaml-mode use-package python-mode projectile powerline pdf-tools org-noter org-brain multiple-cursors jedi go-complete go-autocomplete exec-path-from-shell ess-R-data-view ein csv-mode bbdb async))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "black" :foreground "wheat" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "nil" :family "Menlo")))))
+ '(default ((t (:inherit nil :stipple nil :background "black" :foreground "wheat" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 139 :width normal :foundry "outline" :family "DejaVu Sans Mono")))))
+
+
+;; General configuration ;;
+
+;; Snippets
+(use-package yasnippet
+  :config
+  (yas-reload-all)
+  (add-hook 'python-mode-hook 'yas-minor-mode)
+  (add-hook 'yaml-mode-hook 'yas-minor-mode))
 
 
 ;; Session management
@@ -97,7 +161,7 @@
 
 
 ;; Latex
-(load "auctex.el" nil t t)
+;;(load "auctex.el" nil t t) ;; WINTODO
 ;;(load "preview-latex.el" nil t t)
 
 (setq TeX-auto-save t)
@@ -180,7 +244,7 @@
 ;; org-brain configuration
 (use-package org-brain :ensure t
   :init
-  (setq org-brain-path "~/SynologyDrive/MindMap")
+  (setq org-brain-path "/cygdrive/c/Users/christophe/SynologyDrive/MindMap")
   (setq org-capture-templates
       '()) ; see https://orgmode.org/manual/Capture-templates.html
   :config
@@ -217,48 +281,46 @@ If run interactively, get ENTRY from context."
 
 
 ;; Projectile
-(require 'projectile)
-(projectile-global-mode)
+(use-package projectile
+  :config
+  (projectile-global-mode))
 
 ;; Auto-complete
 (require 'auto-complete-config)
 (ac-config-default)
 
 ;; Python/jedi config
-(add-to-list 'auto-mode-alist '("\\.ipy\\'" . python-mode))
-(require 'jedi) ;for first time use run: M-x jedi:install-server
-(add-to-list 'ac-sources 'ac-source-jedi-direct)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+(use-package python-mode
+  :mode ("\\.ipy\\'" . python-mode))
 
-(defvar jedi-config:use-system-python nil
-  "Will use system python and active environment for Jedi server.
-May be necessary for some GUI environments (e.g., Mac OS X)
-virtualenv should be installed for the server-command python")
+(use-package jedi ;for first time use run: M-x jedi:install-server
+  :config
+  (add-to-list 'ac-sources 'ac-source-jedi-direct)
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (setq jedi:complete-on-dot t)
+  
+  (defvar jedi-config:use-system-python nil
+    "Will use system python and active environment for Jedi server.
+    May be necessary for some GUI environments (e.g., Mac OS X)
+    virtualenv should be installed for the server-command python")
+  
+  ;(setq jedi:server-command
+  ;      (list "/usr/local/bin/python3" jedi:server-script))
+  
+  ;(defvar jedi-config:with-virtualenv nil
+  ;  "Set to non-nil to point to a particular virtualenv.")
+  
+  (defvar jedi-config:vcs-root-sentinel ".git")
+  
+  (defvar jedi-config:python-module-sentinel "__init__.py"))
 
-;(setq jedi:server-command
-;      (list "/usr/local/bin/python3" jedi:server-script))
 
-;(defvar jedi-config:with-virtualenv nil
-;  "Set to non-nil to point to a particular virtualenv.")
+(use-package ein
+  :config
+  (require 'request)
+  (setq request-curl "/usr/bin/curl")
+  (setq ein:output-area-inlined-images t))
 
-(defvar jedi-config:vcs-root-sentinel ".git")
-
-(defvar jedi-config:python-module-sentinel "__init__.py")
-
-(defun set-exec-path-from-shell-PATH ()
-  "Set up Emacs' `exec-path' and PATH environment variable to match that used by the user's shell."
-  (interactive)
-  (let ((path-from-shell (get-shell-output "$SHELL --login -i -c 'echo -n $PATH'")))
-    (setenv "PATH" path-from-shell)
-    (setq exec-path (split-string path-from-shell path-separator))))
-(setenv "PYTHONIOENCODING" "utf-8")
-(setenv "PYTHONPATH" (shell-command-to-string "$SHELL --login -c 'echo -n $PYTHONPATH'"))
-
-;; Mac emacs tweaks
-(setq ns-right-alternate-modifier nil)
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
 
 ;;; Custom cvn
 (setq-default major-mode 'text-mode)
@@ -312,8 +374,16 @@ virtualenv should be installed for the server-command python")
 	  (lambda ()
 	    (define-key term-raw-map (kbd "s-v") 'paste-in-char-term)))
 
+;; csv-mode
+(customize-set-variable 'csv-separators '("," ";"))
+
 ;; CVN keybindings
 ;; C-z is unset to liberate it for personal keybindings
 ;; the frame can still be suspended by double C-z
 (global-unset-key (kbd "C-z"))
 (global-set-key (kbd "C-z C-z") 'suspend-frame)
+
+;; Docker (currently problematic on Windows)
+;; (use-package docker
+;;   :ensure t
+;;   :bind ("C-c d" . docker))
