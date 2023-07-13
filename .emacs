@@ -50,6 +50,7 @@
 			 org-brain
 			 polymode ; org-brain optional dependency
 			 org-noter
+			 org-tree-slide
 			 pdf-tools
 			 csv-mode
 			 ))
@@ -90,6 +91,7 @@ do not have access to regular env variables."
 
 ;; Windows mods
 ( when (memq system-type '(cygwin windows-nt))
+  (set-language-environment "utf-8")
   (setq-default visible-bell t)
   (setq-default buffer-file-coding-system 'utf-8-unix)
   (setq exec-path (append '("/usr/bin" "/usr/local/bin")
@@ -103,9 +105,14 @@ do not have access to regular env variables."
   ;(add-hook 'eshell-mode-hook 'eshell-path-windows-hook)
   ;; https://www.emacswiki.org/emacs/AnsiColor
   (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on) ; to avoid strange codes
+  (add-hook 'term-exec-hook
+          (function
+           (lambda ()
+             (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))))
   (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
   ;;(require 'fakecygpty) ;; windows-nt only
   ;;(fakecygpty-activate)
+  (setq shell-file-name "/bin/bash")
   (defun run-bash ()
       (interactive)
       (let ((shell-file-name "/bin/bash"))
@@ -131,7 +138,7 @@ do not have access to regular env variables."
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(wheatgrass))
  '(package-selected-packages
-   '(yasnippet yaml-mode use-package python-mode projectile powerline pdf-tools org-noter org-brain multiple-cursors jedi go-complete go-autocomplete exec-path-from-shell ess-R-data-view ein csv-mode bbdb async))
+   '(docker-tramp ## org-tree-slide yasnippet yaml-mode use-package python-mode projectile powerline pdf-tools org-noter org-brain multiple-cursors jedi go-complete go-autocomplete exec-path-from-shell ess-R-data-view ein csv-mode bbdb async))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -216,7 +223,10 @@ do not have access to regular env variables."
 (require 'ob-shell)                      ;required for sh
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((python . t) (shell . t) (R . t)))
+ '((python . t)
+   (shell . t)
+   (R . t)
+   (lilypond . t)))
 (setq org-babel-sh-command "bash")
 ;; (setq org-babel-python-command "ipython --no-banner --classic --no-confirm-exit")
 (setq org-babel-python-command "python")
@@ -376,6 +386,19 @@ If run interactively, get ENTRY from context."
 
 ;; csv-mode
 (customize-set-variable 'csv-separators '("," ";"))
+
+;; term functions
+(defun term-copy ()
+  "Copy in term char mode"
+  (interactive)
+  (term-line-mode)
+  (kill-ring-save (region-beginning) (region-end)) 
+  (term-char-mode)
+  )
+(eval-after-load "term"
+  '(define-key term-raw-map (kbd "C-c M-w") 'term-copy))
+(eval-after-load "term"
+  '(define-key term-raw-map (kbd "C-c C-y") 'term-paste))
 
 ;; CVN keybindings
 ;; C-z is unset to liberate it for personal keybindings
