@@ -53,6 +53,7 @@
 			 org-tree-slide
 			 pdf-tools
 			 csv-mode
+			 gptel
 			 ))
 
 ;;; Automatically install dependencies
@@ -410,3 +411,11 @@ If run interactively, get ENTRY from context."
 ;; (use-package docker
 ;;   :ensure t
 ;;   :bind ("C-c d" . docker))
+
+;; store API key in ~/.authinfo[.gpg] line with format: 
+;; machine ai.google.dev login apikey password ****
+(setq
+ gptel-model 'Gemini:gemini-1.5-flash
+ gptel-backend (gptel-make-gemini "Gemini"
+                 :key (plist-get (car (auth-source-search :host "ai.google.dev")) :secret)
+                 :stream t))
