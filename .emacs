@@ -419,3 +419,7 @@ If run interactively, get ENTRY from context."
  gptel-backend (gptel-make-gemini "Gemini"
                  :key (plist-get (car (auth-source-search :host "ai.google.dev")) :secret)
                  :stream t))
+(gptel-make-gpt4all "GPT4All"           ;Name of your choosing
+ :protocol "http"
+ :host "localhost:4891"                 ;Where it's running, enable in GPT4ALL settings
+ :models '(llama-3.2-1b.instruct))      ;Available models
