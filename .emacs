@@ -73,6 +73,10 @@
 
 ;; macOS mods
 ( when (memq system-type '(darwin))
+  ;; Ensure Emacs uses Homebrew's bash
+  (setq shell-file-name "/usr/local/bin/bash")
+  (setenv "SHELL" shell-file-name)
+
   (defun set-exec-path-from-shell-PATH ()
   "Set up Emacs' `exec-path' and PATH environment variable to
 match that used by the user's shell. Mac GUI started programs
